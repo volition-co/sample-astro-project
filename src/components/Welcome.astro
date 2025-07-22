@@ -1,210 +1,436 @@
 ---
 import astroLogo from '../assets/astro.svg';
-import background from '../assets/background.svg';
 ---
 
 <div id="container">
-	<img id="background" src={background.src} alt="" fetchpriority="high" />
-	<main>
-		<section id="hero">
-			<a href="https://astro.build"
-				><img src={astroLogo.src} width="115" height="48" alt="Astro Homepage" /></a
-			>
-			<h1>
-				To get started, open the <code><pre>src/pages</pre></code> directory in your project.
-			</h1>
-			<section id="links">
-				<a class="button" href="https://docs.astro.build">Read our docs</a>
-				<a href="https://astro.build/chat"
-					>Join our Discord <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 127.14 96.36"
-						><path
-							fill="currentColor"
-							d="M107.7 8.07A105.15 105.15 0 0 0 81.47 0a72.06 72.06 0 0 0-3.36 6.83 97.68 97.68 0 0 0-29.11 0A72.37 72.37 0 0 0 45.64 0a105.89 105.89 0 0 0-26.25 8.09C2.79 32.65-1.71 56.6.54 80.21a105.73 105.73 0 0 0 32.17 16.15 77.7 77.7 0 0 0 6.89-11.11 68.42 68.42 0 0 1-10.85-5.18c.91-.66 1.8-1.34 2.66-2a75.57 75.57 0 0 0 64.32 0c.87.71 1.76 1.39 2.66 2a68.68 68.68 0 0 1-10.87 5.19 77 77 0 0 0 6.89 11.1 105.25 105.25 0 0 0 32.19-16.14c2.64-27.38-4.51-51.11-18.9-72.15ZM42.45 65.69C36.18 65.69 31 60 31 53s5-12.74 11.43-12.74S54 46 53.89 53s-5.05 12.69-11.44 12.69Zm42.24 0C78.41 65.69 73.25 60 73.25 53s5-12.74 11.44-12.74S96.23 46 96.12 53s-5.04 12.69-11.43 12.69Z"
-						></path></svg
-					>
-				</a>
-			</section>
-		</section>
-	</main>
+    <div id="retro-grid"></div>
+    <div id="retro-background"></div>
+    
+    <main>
+        <section id="hero">
+            <div id="logo-container">
+                <a href="https://astro.build">
+                    <img src={astroLogo.src} width="115" height="48" alt="Astro Homepage" />
+                </a>
+                <div id="logo-glow"></div>
+            </div>
+            
+            <h1 class="retro-title">
+                <span class="line-1">WELCOME TO THE</span>
+                <span class="line-2">ASTRO ZONE</span>
+            </h1>
+            
+            <p class="retro-subtitle">
+                Boot up your development experience with <code>src/pages</code>
+            </p>
+            
+            <section id="links">
+                <a class="retro-button primary" href="https://docs.astro.build">
+                    <span>▶ READ DOCS</span>
+                </a>
+                <a class="retro-button secondary" href="https://astro.build/chat">
+                    <span>♦ JOIN DISCORD</span>
+                </a>
+            </section>
+        </section>
+    </main>
 
-	<a href="https://astro.build/blog/astro-5/" id="news" class="box">
-		<svg width="32" height="32" fill="none" xmlns="http://www.w3.org/2000/svg"
-			><path
-				d="M24.667 12c1.333 1.414 2 3.192 2 5.334 0 4.62-4.934 5.7-7.334 12C18.444 28.567 18 27.456 18 26c0-4.642 6.667-7.053 6.667-14Zm-5.334-5.333c1.6 1.65 2.4 3.43 2.4 5.333 0 6.602-8.06 7.59-6.4 17.334C13.111 27.787 12 25.564 12 22.666c0-4.434 7.333-8 7.333-16Zm-6-5.333C15.111 3.555 16 5.556 16 7.333c0 8.333-11.333 10.962-5.333 22-3.488-.774-6-4-6-8 0-8.667 8.666-10 8.666-20Z"
-				fill="#111827"></path></svg
-		>
-		<h2>What's New in Astro 5.0?</h2>
-		<p>
-			From content layers to server islands, click to learn more about the new features and
-			improvements in Astro 5.0
-		</p>
-	</a>
+    <div id="terminal-window">
+        <div class="terminal-header">
+            <div class="terminal-buttons">
+                <span class="button red"></span>
+                <span class="button yellow"></span>
+                <span class="button green"></span>
+            </div>
+            <span class="terminal-title">ASTRO_5.exe</span>
+        </div>
+        <div class="terminal-content">
+            <p class="terminal-line">
+                <span class="prompt">&gt;</span> What's New in Astro 5.0?
+            </p>
+            <p class="terminal-line">
+                <span class="cursor">█</span> Content layers, server islands, and more...
+            </p>
+            <a href="https://astro.build/blog/astro-5/" class="terminal-link">
+                <span class="prompt">&gt;</span> CLICK_TO_LEARN_MORE.bat
+            </a>
+        </div>
+    </div>
 </div>
 
 <style>
-	#background {
-		position: fixed;
-		top: 0;
-		left: 0;
-		width: 100%;
-		height: 100%;
-		z-index: -1;
-		filter: blur(100px);
-	}
+    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Courier+Prime:wght@400;700&display=swap');
 
-	#container {
-		font-family: Inter, Roboto, 'Helvetica Neue', 'Arial Nova', 'Nimbus Sans', Arial, sans-serif;
-		height: 100%;
-	}
+    #container {
+        font-family: 'Orbitron', 'Courier Prime', monospace;
+        height: 100%;
+        background: #0a0a0f;
+        color: #00ffff;
+        overflow: hidden;
+        position: relative;
+    }
 
-	main {
-		height: 100%;
-		display: flex;
-		justify-content: center;
-	}
+    /* Retro grid background */
+    #retro-grid {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: 
+            linear-gradient(90deg, transparent 98%, #ff0080 100%) 0 0,
+            linear-gradient(180deg, transparent 98%, #ff0080 100%) 0 0;
+        background-size: 50px 50px;
+        opacity: 0.1;
+        z-index: 1;
+        animation: gridPulse 4s ease-in-out infinite;
+    }
 
-	#hero {
-		display: flex;
-		align-items: start;
-		flex-direction: column;
-		justify-content: center;
-		padding: 16px;
-	}
+    /* Animated background gradient */
+    #retro-background {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: 
+            radial-gradient(circle at 25% 25%, #ff0080 0%, transparent 50%),
+            radial-gradient(circle at 75% 75%, #00ffff 0%, transparent 50%),
+            radial-gradient(circle at 50% 50%, #8000ff 0%, transparent 70%);
+        opacity: 0.1;
+        z-index: 2;
+        animation: backgroundShift 8s linear infinite;
+    }
 
-	h1 {
-		font-size: 22px;
-		margin-top: 0.25em;
-	}
+    main {
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: relative;
+        z-index: 10;
+    }
 
-	#links {
-		display: flex;
-		gap: 16px;
-	}
+    #hero {
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        justify-content: center;
+        padding: 32px;
+        text-align: center;
+        position: relative;
+    }
 
-	#links a {
-		display: flex;
-		align-items: center;
-		padding: 10px 12px;
-		color: #111827;
-		text-decoration: none;
-		transition: color 0.2s;
-	}
+    #logo-container {
+        position: relative;
+        margin-bottom: 2rem;
+    }
 
-	#links a:hover {
-		color: rgb(78, 80, 86);
-	}
+    #logo-container img {
+        filter: hue-rotate(180deg) saturate(2) brightness(1.5);
+        animation: logoGlow 2s ease-in-out infinite alternate;
+    }
 
-	#links a svg {
-		height: 1em;
-		margin-left: 8px;
-	}
+    #logo-glow {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 150px;
+        height: 80px;
+        background: radial-gradient(ellipse, #00ffff 0%, transparent 70%);
+        opacity: 0.3;
+        animation: glowPulse 3s ease-in-out infinite;
+        z-index: -1;
+    }
 
-	#links a.button {
-		color: white;
-		background: linear-gradient(83.21deg, #3245ff 0%, #bc52ee 100%);
-		box-shadow:
-			inset 0 0 0 1px rgba(255, 255, 255, 0.12),
-			inset 0 -2px 0 rgba(0, 0, 0, 0.24);
-		border-radius: 10px;
-	}
+    .retro-title {
+        font-family: 'Orbitron', monospace;
+        font-weight: 900;
+        font-size: 3.5rem;
+        margin: 0;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        line-height: 1.2;
+        text-shadow: 
+            0 0 10px #00ffff,
+            0 0 20px #00ffff,
+            0 0 40px #00ffff;
+        animation: titleFlicker 3s linear infinite;
+    }
 
-	#links a.button:hover {
-		color: rgb(230, 230, 230);
-		box-shadow: none;
-	}
+    .retro-title .line-1 {
+        display: block;
+        color: #ff0080;
+        font-size: 2rem;
+        margin-bottom: 0.2em;
+    }
 
-	pre {
-		font-family:
-			ui-monospace, 'Cascadia Code', 'Source Code Pro', Menlo, Consolas, 'DejaVu Sans Mono',
-			monospace;
-		font-weight: normal;
-		background: linear-gradient(14deg, #d83333 0%, #f041ff 100%);
-		-webkit-background-clip: text;
-		-webkit-text-fill-color: transparent;
-		background-clip: text;
-		margin: 0;
-	}
+    .retro-title .line-2 {
+        display: block;
+        color: #00ffff;
+        text-shadow: 
+            0 0 10px #00ffff,
+            0 0 20px #00ffff,
+            0 0 40px #00ffff;
+    }
 
-	h2 {
-		margin: 0 0 1em;
-		font-weight: normal;
-		color: #111827;
-		font-size: 20px;
-	}
+    .retro-subtitle {
+        font-family: 'Courier Prime', monospace;
+        font-size: 1.2rem;
+        color: #8000ff;
+        margin: 2rem 0;
+        text-shadow: 0 0 5px #8000ff;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
 
-	p {
-		color: #4b5563;
-		font-size: 16px;
-		line-height: 24px;
-		letter-spacing: -0.006em;
-		margin: 0;
-	}
+    code {
+        background: linear-gradient(45deg, #ff0080, #00ffff);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        font-weight: bold;
+        text-shadow: none;
+    }
 
-	code {
-		display: inline-block;
-		background:
-			linear-gradient(66.77deg, #f3cddd 0%, #f5cee7 100%) padding-box,
-			linear-gradient(155deg, #d83333 0%, #f041ff 18%, #f5cee7 45%) border-box;
-		border-radius: 8px;
-		border: 1px solid transparent;
-		padding: 6px 8px;
-	}
+    #links {
+        display: flex;
+        gap: 2rem;
+        margin-top: 3rem;
+    }
 
-	.box {
-		padding: 16px;
-		background: rgba(255, 255, 255, 1);
-		border-radius: 16px;
-		border: 1px solid white;
-	}
+    .retro-button {
+        font-family: 'Orbitron', monospace;
+        font-weight: bold;
+        text-transform: uppercase;
+        text-decoration: none;
+        padding: 1rem 2rem;
+        border: 2px solid;
+        background: transparent;
+        position: relative;
+        overflow: hidden;
+        transition: all 0.3s ease;
+        letter-spacing: 0.1em;
+    }
 
-	#news {
-		position: absolute;
-		bottom: 16px;
-		right: 16px;
-		max-width: 300px;
-		text-decoration: none;
-		transition: background 0.2s;
-		backdrop-filter: blur(50px);
-	}
+    .retro-button::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+        transition: left 0.5s;
+    }
 
-	#news:hover {
-		background: rgba(255, 255, 255, 0.55);
-	}
+    .retro-button:hover::before {
+        left: 100%;
+    }
 
-	@media screen and (max-height: 368px) {
-		#news {
-			display: none;
-		}
-	}
+    .retro-button.primary {
+        color: #00ffff;
+        border-color: #00ffff;
+        box-shadow: 
+            0 0 10px #00ffff,
+            inset 0 0 10px rgba(0, 255, 255, 0.1);
+    }
 
-	@media screen and (max-width: 768px) {
-		#container {
-			display: flex;
-			flex-direction: column;
-		}
+    .retro-button.primary:hover {
+        background: rgba(0, 255, 255, 0.1);
+        box-shadow: 
+            0 0 20px #00ffff,
+            inset 0 0 20px rgba(0, 255, 255, 0.2);
+        transform: scale(1.05);
+    }
 
-		#hero {
-			display: block;
-			padding-top: 10%;
-		}
+    .retro-button.secondary {
+        color: #ff0080;
+        border-color: #ff0080;
+        box-shadow: 
+            0 0 10px #ff0080,
+            inset 0 0 10px rgba(255, 0, 128, 0.1);
+    }
 
-		#links {
-			flex-wrap: wrap;
-		}
+    .retro-button.secondary:hover {
+        background: rgba(255, 0, 128, 0.1);
+        box-shadow: 
+            0 0 20px #ff0080,
+            inset 0 0 20px rgba(255, 0, 128, 0.2);
+        transform: scale(1.05);
+    }
 
-		#links a.button {
-			padding: 14px 18px;
-		}
+    /* Terminal window styling */
+    #terminal-window {
+        position: fixed;
+        bottom: 2rem;
+        right: 2rem;
+        width: 400px;
+        background: rgba(0, 0, 0, 0.9);
+        border: 1px solid #00ffff;
+        border-radius: 8px;
+        box-shadow: 
+            0 0 20px rgba(0, 255, 255, 0.3),
+            inset 0 0 20px rgba(0, 255, 255, 0.1);
+        z-index: 20;
+    }
 
-		#news {
-			right: 16px;
-			left: 16px;
-			bottom: 2.5rem;
-			max-width: 100%;
-		}
+    .terminal-header {
+        background: linear-gradient(135deg, #1a1a2e, #16213e);
+        padding: 0.5rem 1rem;
+        border-bottom: 1px solid #00ffff;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-radius: 8px 8px 0 0;
+    }
 
-		h1 {
-			line-height: 1.5;
-		}
-	}
+    .terminal-buttons {
+        display: flex;
+        gap: 0.5rem;
+    }
+
+    .terminal-buttons .button {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+    }
+
+    .terminal-buttons .button.red {
+        background: #ff5f56;
+    }
+
+    .terminal-buttons .button.yellow {
+        background: #ffbd2e;
+    }
+
+    .terminal-buttons .button.green {
+        background: #27ca3f;
+    }
+
+    .terminal-title {
+        font-family: 'Courier Prime', monospace;
+        color: #00ffff;
+        font-size: 0.8rem;
+        text-transform: uppercase;
+    }
+
+    .terminal-content {
+        padding: 1rem;
+        font-family: 'Courier Prime', monospace;
+        font-size: 0.9rem;
+        line-height: 1.4;
+    }
+
+    .terminal-line {
+        margin: 0.5rem 0;
+        color: #00ff00;
+    }
+
+    .prompt {
+        color: #ff0080;
+        margin-right: 0.5rem;
+    }
+
+    .cursor {
+        color: #00ffff;
+        animation: cursorBlink 1s infinite;
+    }
+
+    .terminal-link {
+        color: #00ffff;
+        text-decoration: none;
+        display: block;
+        margin-top: 1rem;
+        transition: all 0.3s ease;
+    }
+
+    .terminal-link:hover {
+        color: #ff0080;
+        text-shadow: 0 0 5px #ff0080;
+    }
+
+    /* Animations */
+    @keyframes gridPulse {
+        0%, 100% { opacity: 0.1; }
+        50% { opacity: 0.2; }
+    }
+
+    @keyframes backgroundShift {
+        0% { transform: rotate(0deg) scale(1); }
+        33% { transform: rotate(120deg) scale(1.1); }
+        66% { transform: rotate(240deg) scale(0.9); }
+        100% { transform: rotate(360deg) scale(1); }
+    }
+
+    @keyframes logoGlow {
+        from { filter: hue-rotate(180deg) saturate(2) brightness(1.5) drop-shadow(0 0 5px #00ffff); }
+        to { filter: hue-rotate(180deg) saturate(2) brightness(2) drop-shadow(0 0 15px #00ffff); }
+    }
+
+    @keyframes glowPulse {
+        0%, 100% { opacity: 0.3; transform: translate(-50%, -50%) scale(1); }
+        50% { opacity: 0.6; transform: translate(-50%, -50%) scale(1.2); }
+    }
+
+    @keyframes titleFlicker {
+        0%, 100% { opacity: 1; }
+        98% { opacity: 1; }
+        99% { opacity: 0.8; }
+    }
+
+    @keyframes cursorBlink {
+        0%, 50% { opacity: 1; }
+        51%, 100% { opacity: 0; }
+    }
+
+    /* Responsive design */
+    @media screen and (max-width: 768px) {
+        .retro-title {
+            font-size: 2.5rem;
+        }
+
+        .retro-title .line-1 {
+            font-size: 1.5rem;
+        }
+
+        .retro-subtitle {
+            font-size: 1rem;
+        }
+
+        #links {
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .retro-button {
+            padding: 0.8rem 1.5rem;
+        }
+
+        #terminal-window {
+            right: 1rem;
+            left: 1rem;
+            width: auto;
+            bottom: 1rem;
+        }
+
+        #hero {
+            padding: 1rem;
+        }
+    }
+
+    @media screen and (max-height: 600px) {
+        #terminal-window {
+            display: none;
+        }
+
+        .retro-title {
+            font-size: 2rem;
+        }
+
+        .retro-title .line-1 {
+            font-size: 1.2rem;
+        }
+    }
 </style>
