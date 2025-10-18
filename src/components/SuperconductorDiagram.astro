@@ -1,0 +1,334 @@
+---
+// Superconductor workflow diagram with animated light flows
+---
+
+<div class="superconductor-container">
+	<h1>Superconductor</h1>
+	<p class="subtitle">Accelerating product development with intelligent workflow automation</p>
+	<div id="cy"></div>
+</div>
+
+<script>
+	import cytoscape from 'cytoscape';
+
+	// Define the workflow graph structure
+	const elements = [
+		// Input nodes (left side)
+		{ data: { id: 'customer-requests', label: 'Customer requests\n(emails, intercom, etc)', type: 'input' } },
+		{ data: { id: 'product-ideas', label: 'Own product ideas', type: 'input' } },
+		{ data: { id: 'external-news', label: 'External news (X, etc)', type: 'input' } },
+		{ data: { id: 'session-recordings', label: 'User session recordings', type: 'input' } },
+		{ data: { id: 'bugs', label: 'Bugs (Sentry, etc)', type: 'input' } },
+
+		// Workflow nodes
+		{ data: { id: 'pm-1', label: 'PM', type: 'role', role: 'pm' } },
+		{ data: { id: 'pm-2', label: 'PM', type: 'role', role: 'pm-alt' } },
+		{ data: { id: 'prototyper', label: 'Prototyper', type: 'role', role: 'prototyper' } },
+		{ data: { id: 'designer', label: 'Designer', type: 'role', role: 'designer' } },
+		{ data: { id: 'dev-1', label: 'Dev', type: 'role', role: 'dev' } },
+		{ data: { id: 'dev-2', label: 'Dev', type: 'role', role: 'dev-alt' } },
+		{ data: { id: 'qa', label: 'QA', type: 'role', role: 'qa' } },
+		{ data: { id: 'reviewer', label: 'Reviewer', type: 'role', role: 'reviewer' } },
+		{ data: { id: 'pentester', label: 'PenTester', type: 'role', role: 'pentester' } },
+		{ data: { id: 'code-owner', label: 'Code owner', type: 'role', role: 'code-owner' } },
+
+		// Output node
+		{ data: { id: 'app', label: 'App', type: 'output' } },
+
+		// Edges (connections)
+		{ data: { source: 'customer-requests', target: 'pm-1' } },
+		{ data: { source: 'product-ideas', target: 'pm-1' } },
+		{ data: { source: 'external-news', target: 'pm-1' } },
+		{ data: { source: 'session-recordings', target: 'pm-1' } },
+		{ data: { source: 'bugs', target: 'pm-1' } },
+
+		{ data: { source: 'pm-1', target: 'prototyper' } },
+		{ data: { source: 'pm-1', target: 'pm-2' } },
+		{ data: { source: 'pm-2', target: 'prototyper' } },
+
+		{ data: { source: 'prototyper', target: 'dev-1' } },
+		{ data: { source: 'prototyper', target: 'designer' } },
+		{ data: { source: 'designer', target: 'dev-1' } },
+
+		{ data: { source: 'dev-1', target: 'qa' } },
+		{ data: { source: 'dev-1', target: 'reviewer' } },
+		{ data: { source: 'dev-1', target: 'pentester' } },
+		{ data: { source: 'dev-1', target: 'dev-2' } },
+		{ data: { source: 'dev-2', target: 'reviewer' } },
+
+		{ data: { source: 'qa', target: 'reviewer' } },
+		{ data: { source: 'pentester', target: 'reviewer' } },
+		{ data: { source: 'reviewer', target: 'code-owner' } },
+		{ data: { source: 'code-owner', target: 'app' } },
+	];
+
+	// Initialize Cytoscape
+	const cy = cytoscape({
+		container: document.getElementById('cy'),
+		elements: elements,
+		style: [
+			{
+				selector: 'node',
+				style: {
+					'background-color': '#3a3a3a',
+					'label': 'data(label)',
+					'text-valign': 'center',
+					'text-halign': 'center',
+					'color': '#ffffff',
+					'font-size': '12px',
+					'border-width': 2,
+					'border-color': '#555',
+					'text-wrap': 'wrap',
+					'text-max-width': '100px',
+					'width': '80px',
+					'height': '50px',
+					'shape': 'roundrectangle'
+				}
+			},
+			{
+				selector: 'node[type="input"]',
+				style: {
+					'background-color': '#2a2a2a',
+					'border-color': '#666',
+					'width': '120px',
+					'height': '50px'
+				}
+			},
+			{
+				selector: 'node[role="pm"]',
+				style: {
+					'background-color': '#1e3a5f',
+					'border-color': '#4a7ba7'
+				}
+			},
+			{
+				selector: 'node[role="pm-alt"]',
+				style: {
+					'background-color': '#8b7d3a',
+					'border-color': '#c4a853'
+				}
+			},
+			{
+				selector: 'node[role="prototyper"]',
+				style: {
+					'background-color': '#1e3a5f',
+					'border-color': '#4a7ba7'
+				}
+			},
+			{
+				selector: 'node[role="designer"]',
+				style: {
+					'background-color': '#8b7d3a',
+					'border-color': '#c4a853'
+				}
+			},
+			{
+				selector: 'node[role="dev"]',
+				style: {
+					'background-color': '#1e3a5f',
+					'border-color': '#4a7ba7'
+				}
+			},
+			{
+				selector: 'node[role="dev-alt"]',
+				style: {
+					'background-color': '#8b7d3a',
+					'border-color': '#c4a853'
+				}
+			},
+			{
+				selector: 'node[role="qa"]',
+				style: {
+					'background-color': '#1e3a5f',
+					'border-color': '#4a7ba7'
+				}
+			},
+			{
+				selector: 'node[role="reviewer"]',
+				style: {
+					'background-color': '#1e3a5f',
+					'border-color': '#4a7ba7'
+				}
+			},
+			{
+				selector: 'node[role="pentester"]',
+				style: {
+					'background-color': '#1e3a5f',
+					'border-color': '#4a7ba7'
+				}
+			},
+			{
+				selector: 'node[role="code-owner"]',
+				style: {
+					'background-color': '#8b7d3a',
+					'border-color': '#c4a853'
+				}
+			},
+			{
+				selector: 'node[type="output"]',
+				style: {
+					'background-color': '#2a2a2a',
+					'border-color': '#888',
+					'width': '60px',
+					'height': '50px'
+				}
+			},
+			{
+				selector: 'edge',
+				style: {
+					'width': 2,
+					'line-color': '#555',
+					'target-arrow-color': '#555',
+					'target-arrow-shape': 'triangle',
+					'curve-style': 'bezier'
+				}
+			}
+		],
+		layout: {
+			name: 'preset',
+			positions: function(node) {
+				const id = node.id();
+				const positions = {
+					'customer-requests': { x: 100, y: 80 },
+					'product-ideas': { x: 100, y: 180 },
+					'external-news': { x: 100, y: 280 },
+					'session-recordings': { x: 100, y: 380 },
+					'bugs': { x: 100, y: 480 },
+
+					'pm-1': { x: 320, y: 220 },
+					'pm-2': { x: 320, y: 320 },
+					'prototyper': { x: 480, y: 240 },
+					'designer': { x: 480, y: 340 },
+					'dev-1': { x: 640, y: 240 },
+					'dev-2': { x: 640, y: 340 },
+
+					'qa': { x: 800, y: 180 },
+					'reviewer': { x: 800, y: 280 },
+					'pentester': { x: 800, y: 380 },
+					'code-owner': { x: 960, y: 280 },
+					'app': { x: 1120, y: 280 }
+				};
+				return positions[id] || { x: 0, y: 0 };
+			}
+		}
+	});
+
+	// Animation: Light flow through the graph
+	const paths = [
+		['bugs', 'pm-1', 'prototyper', 'dev-1', 'qa', 'reviewer', 'code-owner', 'app'],
+		['customer-requests', 'pm-1', 'pm-2', 'prototyper', 'designer', 'dev-1', 'pentester', 'reviewer', 'code-owner', 'app'],
+		['product-ideas', 'pm-1', 'prototyper', 'dev-1', 'dev-2', 'reviewer', 'code-owner', 'app'],
+		['session-recordings', 'pm-1', 'prototyper', 'dev-1', 'reviewer', 'code-owner', 'app']
+	];
+
+	let currentPathIndex = 0;
+
+	function animatePath(path) {
+		let step = 0;
+
+		function animateStep() {
+			if (step >= path.length) {
+				// Pulse the app node at the end
+				const appNode = cy.$('#app');
+				appNode.style('background-color', '#4a9eff');
+				appNode.style('border-color', '#80c0ff');
+				setTimeout(() => {
+					appNode.style('background-color', '#2a2a2a');
+					appNode.style('border-color', '#888');
+				}, 500);
+
+				// Start next path after a delay
+				setTimeout(() => {
+					currentPathIndex = (currentPathIndex + 1) % paths.length;
+					animatePath(paths[currentPathIndex]);
+				}, 2000);
+				return;
+			}
+
+			const nodeId = path[step];
+			const node = cy.$('#' + nodeId);
+
+			// Highlight current node
+			node.style('background-color', '#4a9eff');
+			node.style('border-color', '#80c0ff');
+
+			// Highlight edge to next node
+			if (step < path.length - 1) {
+				const nextNodeId = path[step + 1];
+				const edge = cy.edges(`[source="${nodeId}"][target="${nextNodeId}"]`);
+				edge.style('line-color', '#4a9eff');
+				edge.style('target-arrow-color', '#4a9eff');
+				edge.style('width', 4);
+			}
+
+			// Reset node after delay
+			setTimeout(() => {
+				// Reset to original color based on node type
+				const nodeData = node.data();
+				if (nodeData.type === 'input' || nodeData.type === 'output') {
+					node.style('background-color', '#2a2a2a');
+					node.style('border-color', nodeData.type === 'output' ? '#888' : '#666');
+				} else {
+					// Role-based colors
+					const isBlue = ['pm', 'prototyper', 'dev', 'qa', 'reviewer', 'pentester'].includes(nodeData.role);
+					node.style('background-color', isBlue ? '#1e3a5f' : '#8b7d3a');
+					node.style('border-color', isBlue ? '#4a7ba7' : '#c4a853');
+				}
+
+				// Reset edge
+				if (step < path.length - 1) {
+					const nextNodeId = path[step + 1];
+					const edge = cy.edges(`[source="${nodeId}"][target="${nextNodeId}"]`);
+					edge.style('line-color', '#555');
+					edge.style('target-arrow-color', '#555');
+					edge.style('width', 2);
+				}
+			}, 400);
+
+			step++;
+			setTimeout(animateStep, 500);
+		}
+
+		animateStep();
+	}
+
+	// Start the animation after a short delay
+	setTimeout(() => {
+		animatePath(paths[currentPathIndex]);
+	}, 1000);
+</script>
+
+<style>
+	.superconductor-container {
+		width: 100%;
+		height: 100vh;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		padding: 2rem;
+		box-sizing: border-box;
+	}
+
+	h1 {
+		font-size: 3rem;
+		margin: 0 0 0.5rem 0;
+		font-weight: 300;
+		letter-spacing: -0.02em;
+	}
+
+	.subtitle {
+		font-size: 1.1rem;
+		color: #aaa;
+		margin: 0 0 2rem 0;
+		font-weight: 300;
+	}
+
+	#cy {
+		width: 100%;
+		max-width: 1300px;
+		height: 600px;
+		background: #252525;
+		border-radius: 12px;
+		border: 1px solid #333;
+	}
+</style>
