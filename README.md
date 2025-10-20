@@ -1,5 +1,13 @@
 # Astro Starter Kit: Basics
 
+## Haiku
+
+```
+Code flows like water
+Debugging through the long night
+Finally it runs
+```
+
 test
 
 ```sh
