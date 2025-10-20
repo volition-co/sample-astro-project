@@ -6,6 +6,7 @@
 	<h1>Superconductor</h1>
 	<p class="subtitle">Accelerating product development with intelligent workflow automation</p>
 	<div id="cy"></div>
+	<p class="mobile-hint">Scroll down to see the full workflow</p>
 </div>
 
 <script>
@@ -14,26 +15,27 @@
 	// Define the workflow graph structure
 	const elements = [
 		// Input nodes (left side)
-		{ data: { id: 'customer-requests', label: 'Customer requests\n(emails, intercom, etc)', type: 'input' } },
-		{ data: { id: 'product-ideas', label: 'Own product ideas', type: 'input' } },
-		{ data: { id: 'external-news', label: 'External news (X, etc)', type: 'input' } },
-		{ data: { id: 'session-recordings', label: 'User session recordings', type: 'input' } },
-		{ data: { id: 'bugs', label: 'Bugs (Sentry, etc)', type: 'input' } },
+		{ data: { id: 'customer-requests', label: '📧 Customer requests\n(emails, intercom, etc)', type: 'input' } },
+		{ data: { id: 'product-ideas', label: '💡 Own product ideas', type: 'input' } },
+		{ data: { id: 'external-news', label: '🌐 External news (X, etc)', type: 'input' } },
+		{ data: { id: 'session-recordings', label: '🎥 User session recordings', type: 'input' } },
+		{ data: { id: 'bugs', label: '🐛 Bugs (Sentry, etc)', type: 'input' } },
 
 		// Workflow nodes
-		{ data: { id: 'pm-1', label: 'PM', type: 'role', role: 'pm' } },
-		{ data: { id: 'pm-2', label: 'PM', type: 'role', role: 'pm-alt' } },
-		{ data: { id: 'prototyper', label: 'Prototyper', type: 'role', role: 'prototyper' } },
-		{ data: { id: 'designer', label: 'Designer', type: 'role', role: 'designer' } },
-		{ data: { id: 'dev-1', label: 'Dev', type: 'role', role: 'dev' } },
-		{ data: { id: 'dev-2', label: 'Dev', type: 'role', role: 'dev-alt' } },
-		{ data: { id: 'qa', label: 'QA', type: 'role', role: 'qa' } },
-		{ data: { id: 'reviewer', label: 'Reviewer', type: 'role', role: 'reviewer' } },
-		{ data: { id: 'pentester', label: 'PenTester', type: 'role', role: 'pentester' } },
-		{ data: { id: 'code-owner', label: 'Code owner', type: 'role', role: 'code-owner' } },
+		{ data: { id: 'pm-1', label: '🤖 PM', type: 'role', role: 'pm' } },
+		{ data: { id: 'pm-2', label: '👨‍🦰 PM', type: 'role', role: 'pm-alt' } },
+		{ data: { id: 'prototyper', label: '🤖 Prototyper', type: 'role', role: 'prototyper' } },
+		{ data: { id: 'designer', label: '👩 Designer', type: 'role', role: 'designer' } },
+		{ data: { id: 'dev-1', label: '🤖 Dev', type: 'role', role: 'dev' } },
+		{ data: { id: 'dev-2', label: '👩 Dev', type: 'role', role: 'dev-alt' } },
+		{ data: { id: 'qa', label: '🤖 QA', type: 'role', role: 'qa' } },
+		{ data: { id: 'reviewer', label: '🤖 Reviewer', type: 'role', role: 'reviewer' } },
+		{ data: { id: 'pentester', label: '🤖 PenTester', type: 'role', role: 'pentester' } },
+		{ data: { id: 'code-owner', label: '👨‍🦰 Code owner', type: 'role', role: 'code-owner' } },
+		{ data: { id: 'github-pr', label: '🔀 GitHub PR', type: 'role', role: 'github' } },
 
 		// Output node
-		{ data: { id: 'app', label: 'App', type: 'output' } },
+		{ data: { id: 'app', label: '💻 App', type: 'output' } },
 
 		// Edges (connections)
 		{ data: { source: 'customer-requests', target: 'pm-1' } },
@@ -56,16 +58,24 @@
 		{ data: { source: 'dev-1', target: 'dev-2' } },
 		{ data: { source: 'dev-2', target: 'reviewer' } },
 
-		{ data: { source: 'qa', target: 'reviewer' } },
-		{ data: { source: 'pentester', target: 'reviewer' } },
-		{ data: { source: 'reviewer', target: 'code-owner' } },
+		{ data: { source: 'qa', target: 'github-pr' } },
+		{ data: { source: 'pentester', target: 'github-pr' } },
+		{ data: { source: 'reviewer', target: 'github-pr' } },
+		{ data: { source: 'github-pr', target: 'code-owner' } },
 		{ data: { source: 'code-owner', target: 'app' } },
 	];
+
+	// Check if mobile
+	const isMobile = window.innerWidth < 768;
 
 	// Initialize Cytoscape
 	const cy = cytoscape({
 		container: document.getElementById('cy'),
 		elements: elements,
+		userZoomingEnabled: !isMobile,
+		userPanningEnabled: !isMobile,
+		boxSelectionEnabled: false,
+		wheelSensitivity: 0.2,
 		style: [
 			{
 				selector: 'node',
@@ -75,13 +85,13 @@
 					'text-valign': 'center',
 					'text-halign': 'center',
 					'color': '#ffffff',
-					'font-size': '12px',
+					'font-size': isMobile ? '9px' : '12px',
 					'border-width': 2,
 					'border-color': '#555',
 					'text-wrap': 'wrap',
-					'text-max-width': '100px',
-					'width': '80px',
-					'height': '50px',
+					'text-max-width': isMobile ? '60px' : '100px',
+					'width': isMobile ? '55px' : '80px',
+					'height': isMobile ? '35px' : '50px',
 					'shape': 'roundrectangle'
 				}
 			},
@@ -90,8 +100,8 @@
 				style: {
 					'background-color': '#2a2a2a',
 					'border-color': '#666',
-					'width': '120px',
-					'height': '50px'
+					'width': isMobile ? '80px' : '120px',
+					'height': isMobile ? '35px' : '50px'
 				}
 			},
 			{
@@ -165,12 +175,19 @@
 				}
 			},
 			{
+				selector: 'node[role="github"]',
+				style: {
+					'background-color': '#1e3a5f',
+					'border-color': '#4a7ba7'
+				}
+			},
+			{
 				selector: 'node[type="output"]',
 				style: {
 					'background-color': '#2a2a2a',
 					'border-color': '#888',
-					'width': '60px',
-					'height': '50px'
+					'width': isMobile ? '45px' : '60px',
+					'height': isMobile ? '35px' : '50px'
 				}
 			},
 			{
@@ -188,105 +205,229 @@
 			name: 'preset',
 			positions: function(node) {
 				const id = node.id();
-				const positions = {
-					'customer-requests': { x: 100, y: 80 },
-					'product-ideas': { x: 100, y: 180 },
-					'external-news': { x: 100, y: 280 },
-					'session-recordings': { x: 100, y: 380 },
-					'bugs': { x: 100, y: 480 },
 
-					'pm-1': { x: 320, y: 220 },
-					'pm-2': { x: 320, y: 320 },
-					'prototyper': { x: 480, y: 240 },
-					'designer': { x: 480, y: 340 },
-					'dev-1': { x: 640, y: 240 },
-					'dev-2': { x: 640, y: 340 },
+				// Vertical layout for mobile, horizontal for desktop
+				if (isMobile) {
+					const mobilePositions = {
+						// Inputs at top (row 1)
+						'customer-requests': { x: 40, y: 50 },
+						'product-ideas': { x: 120, y: 50 },
+						'external-news': { x: 200, y: 50 },
+						'session-recordings': { x: 280, y: 50 },
+						'bugs': { x: 360, y: 50 },
 
-					'qa': { x: 800, y: 180 },
-					'reviewer': { x: 800, y: 280 },
-					'pentester': { x: 800, y: 380 },
-					'code-owner': { x: 960, y: 280 },
-					'app': { x: 1120, y: 280 }
-				};
-				return positions[id] || { x: 0, y: 0 };
+						// First PM row (row 2)
+						'pm-1': { x: 140, y: 150 },
+						'pm-2': { x: 260, y: 150 },
+
+						// Prototyper & Designer (row 3)
+						'prototyper': { x: 140, y: 250 },
+						'designer': { x: 260, y: 250 },
+
+						// Dev row (row 4)
+						'dev-1': { x: 140, y: 350 },
+						'dev-2': { x: 260, y: 350 },
+
+						// QA, Reviewer, PenTester (row 5)
+						'qa': { x: 80, y: 450 },
+						'reviewer': { x: 200, y: 450 },
+						'pentester': { x: 320, y: 450 },
+
+						// GitHub PR (row 6)
+						'github-pr': { x: 200, y: 550 },
+
+						// Code owner (row 7)
+						'code-owner': { x: 200, y: 650 },
+
+						// App (row 8)
+						'app': { x: 200, y: 750 }
+					};
+					return mobilePositions[id] || { x: 0, y: 0 };
+				} else {
+					const desktopPositions = {
+						'customer-requests': { x: 100, y: 80 },
+						'product-ideas': { x: 100, y: 180 },
+						'external-news': { x: 100, y: 280 },
+						'session-recordings': { x: 100, y: 380 },
+						'bugs': { x: 100, y: 480 },
+
+						'pm-1': { x: 320, y: 220 },
+						'pm-2': { x: 320, y: 320 },
+						'prototyper': { x: 480, y: 240 },
+						'designer': { x: 480, y: 340 },
+						'dev-1': { x: 640, y: 240 },
+						'dev-2': { x: 640, y: 340 },
+
+						'qa': { x: 800, y: 180 },
+						'reviewer': { x: 800, y: 280 },
+						'pentester': { x: 800, y: 380 },
+						'github-pr': { x: 960, y: 280 },
+						'code-owner': { x: 1080, y: 280 },
+						'app': { x: 1220, y: 280 }
+					};
+					return desktopPositions[id] || { x: 0, y: 0 };
+				}
 			}
 		}
 	});
 
-	// Animation: Light flow through the graph
-	const paths = [
-		['bugs', 'pm-1', 'prototyper', 'dev-1', 'qa', 'reviewer', 'code-owner', 'app'],
-		['customer-requests', 'pm-1', 'pm-2', 'prototyper', 'designer', 'dev-1', 'pentester', 'reviewer', 'code-owner', 'app'],
-		['product-ideas', 'pm-1', 'prototyper', 'dev-1', 'dev-2', 'reviewer', 'code-owner', 'app'],
-		['session-recordings', 'pm-1', 'prototyper', 'dev-1', 'reviewer', 'code-owner', 'app']
+	// Fit the graph to the container
+	if (isMobile) {
+		cy.fit(30);
+	} else {
+		cy.fit(30);
+		cy.maxZoom(2);
+		cy.minZoom(0.5);
+	}
+
+	// Work item definitions with labels and colors
+	const workItems = [
+		{
+			path: ['bugs', 'pm-1', 'prototyper', 'dev-1', 'qa', 'github-pr', 'code-owner', 'app'],
+			label: 'Bug #3847',
+			color: '#ff6b6b'
+		},
+		{
+			path: ['customer-requests', 'pm-1', 'pm-2', 'prototyper', 'designer', 'dev-1', 'pentester', 'github-pr', 'code-owner', 'app'],
+			label: 'Feature: Dark mode',
+			color: '#51cf66'
+		},
+		{
+			path: ['product-ideas', 'pm-1', 'prototyper', 'dev-1', 'dev-2', 'reviewer', 'github-pr', 'code-owner', 'app'],
+			label: 'Enhancement #421',
+			color: '#4dabf7'
+		},
+		{
+			path: ['session-recordings', 'pm-1', 'prototyper', 'dev-1', 'reviewer', 'github-pr', 'code-owner', 'app'],
+			label: 'UX Improvement',
+			color: '#ffd43b'
+		}
 	];
 
 	let currentPathIndex = 0;
+	let particleId = 0;
 
-	function animatePath(path) {
+	// Create particle element with label
+	function createParticle(label, color) {
+		const particle = document.createElement('div');
+		particle.className = 'flow-particle';
+		particle.id = `particle-${particleId++}`;
+		particle.style.setProperty('--particle-color', color);
+
+		const labelEl = document.createElement('div');
+		labelEl.className = 'particle-label';
+		labelEl.textContent = label;
+		labelEl.style.color = color;
+
+		particle.appendChild(labelEl);
+		document.getElementById('cy').appendChild(particle);
+		return particle;
+	}
+
+	function animateWorkItem(workItem) {
+		const particle = createParticle(workItem.label, workItem.color);
+		const path = workItem.path;
 		let step = 0;
 
-		function animateStep() {
-			if (step >= path.length) {
-				// Pulse the app node at the end
-				const appNode = cy.$('#app');
-				appNode.style('background-color', '#4a9eff');
-				appNode.style('border-color', '#80c0ff');
-				setTimeout(() => {
-					appNode.style('background-color', '#2a2a2a');
-					appNode.style('border-color', '#888');
-				}, 500);
+		console.log('Starting animation for:', workItem.label, 'Path:', path);
 
-				// Start next path after a delay
+		function animateStep() {
+			if (step >= path.length - 1) {
+				console.log('Reached end of path');
+				// Grow and pulse the app node at the end
+				const appNode = cy.$('#app');
+				appNode.animate({
+					style: {
+						'width': isMobile ? '68px' : '90px',
+						'height': isMobile ? '53px' : '75px',
+						'background-color': '#4a9eff',
+						'border-color': '#80c0ff'
+					},
+					duration: 300,
+					easing: 'ease-out-cubic'
+				}).animate({
+					style: {
+						'width': isMobile ? '45px' : '60px',
+						'height': isMobile ? '35px' : '50px',
+						'background-color': '#2a2a2a',
+						'border-color': '#888'
+					},
+					duration: 300,
+					easing: 'ease-in-cubic'
+				});
+
+				// Remove particle
 				setTimeout(() => {
-					currentPathIndex = (currentPathIndex + 1) % paths.length;
-					animatePath(paths[currentPathIndex]);
-				}, 2000);
+					particle.remove();
+				}, 600);
+
+				// Start next work item after a delay
+				setTimeout(() => {
+					currentPathIndex = (currentPathIndex + 1) % workItems.length;
+					animateWorkItem(workItems[currentPathIndex]);
+				}, 1500);
 				return;
 			}
 
 			const nodeId = path[step];
+			const nextNodeId = path[step + 1];
 			const node = cy.$('#' + nodeId);
+			const nextNode = cy.$('#' + nextNodeId);
 
-			// Highlight current node
-			node.style('background-color', '#4a9eff');
-			node.style('border-color', '#80c0ff');
+			console.log(`Animating step ${step}: ${nodeId} -> ${nextNodeId}`);
 
-			// Highlight edge to next node
-			if (step < path.length - 1) {
-				const nextNodeId = path[step + 1];
-				const edge = cy.edges(`[source="${nodeId}"][target="${nextNodeId}"]`);
-				edge.style('line-color', '#4a9eff');
-				edge.style('target-arrow-color', '#4a9eff');
-				edge.style('width', 4);
+			// Get rendered positions (these are already relative to the container)
+			const sourcePos = node.renderedPosition();
+			const targetPos = nextNode.renderedPosition();
+
+			console.log('Source pos:', sourcePos, 'Target pos:', targetPos);
+
+			// Subtle glow on current node
+			node.animate({
+				style: {
+					'border-color': '#80c0ff',
+					'border-width': 3
+				},
+				duration: 200,
+				easing: 'ease-out'
+			}).delay(400).animate({
+				style: {
+					'border-width': 2
+				},
+				duration: 200
+			});
+
+			// Animate particle along the edge path
+			const startTime = Date.now();
+			const duration = 800; // ms to travel along edge
+
+			function animateAlongEdge() {
+				const elapsed = Date.now() - startTime;
+				const progress = Math.min(elapsed / duration, 1);
+
+				// Ease-in-out function for smooth motion
+				const eased = progress < 0.5
+					? 2 * progress * progress
+					: 1 - Math.pow(-2 * progress + 2, 2) / 2;
+
+				// Interpolate position along the edge
+				const x = sourcePos.x + (targetPos.x - sourcePos.x) * eased;
+				const y = sourcePos.y + (targetPos.y - sourcePos.y) * eased;
+
+				particle.style.left = `${x}px`;
+				particle.style.top = `${y}px`;
+
+				if (progress < 1) {
+					requestAnimationFrame(animateAlongEdge);
+				} else {
+					// Move to next step
+					step++;
+					setTimeout(animateStep, 100);
+				}
 			}
 
-			// Reset node after delay
-			setTimeout(() => {
-				// Reset to original color based on node type
-				const nodeData = node.data();
-				if (nodeData.type === 'input' || nodeData.type === 'output') {
-					node.style('background-color', '#2a2a2a');
-					node.style('border-color', nodeData.type === 'output' ? '#888' : '#666');
-				} else {
-					// Role-based colors
-					const isBlue = ['pm', 'prototyper', 'dev', 'qa', 'reviewer', 'pentester'].includes(nodeData.role);
-					node.style('background-color', isBlue ? '#1e3a5f' : '#8b7d3a');
-					node.style('border-color', isBlue ? '#4a7ba7' : '#c4a853');
-				}
-
-				// Reset edge
-				if (step < path.length - 1) {
-					const nextNodeId = path[step + 1];
-					const edge = cy.edges(`[source="${nodeId}"][target="${nextNodeId}"]`);
-					edge.style('line-color', '#555');
-					edge.style('target-arrow-color', '#555');
-					edge.style('width', 2);
-				}
-			}, 400);
-
-			step++;
-			setTimeout(animateStep, 500);
+			// Start the edge animation
+			animateAlongEdge();
 		}
 
 		animateStep();
@@ -294,7 +435,7 @@
 
 	// Start the animation after a short delay
 	setTimeout(() => {
-		animatePath(paths[currentPathIndex]);
+		animateWorkItem(workItems[currentPathIndex]);
 	}, 1000);
 </script>
 
@@ -307,6 +448,7 @@
 		align-items: center;
 		padding: 2rem;
 		box-sizing: border-box;
+		position: relative;
 	}
 
 	h1 {
@@ -321,6 +463,7 @@
 		color: #aaa;
 		margin: 0 0 2rem 0;
 		font-weight: 300;
+		text-align: center;
 	}
 
 	#cy {
@@ -330,5 +473,87 @@
 		background: #252525;
 		border-radius: 12px;
 		border: 1px solid #333;
+		position: relative;
+		touch-action: pan-y;
+	}
+
+	@media (max-width: 768px) {
+		.superconductor-container {
+			padding: 1rem;
+			height: auto;
+			min-height: 100vh;
+		}
+
+		h1 {
+			font-size: 2rem;
+			margin: 0 0 0.25rem 0;
+		}
+
+		.subtitle {
+			font-size: 0.9rem;
+			margin: 0 0 1rem 0;
+		}
+
+		#cy {
+			height: 900px;
+			border-radius: 8px;
+			overflow-y: auto;
+			touch-action: pan-y;
+		}
+	}
+
+	.flow-particle {
+		--particle-color: #4a9eff;
+		position: absolute;
+		width: 16px;
+		height: 16px;
+		background: var(--particle-color);
+		border-radius: 50%;
+		pointer-events: none;
+		z-index: 10000;
+		opacity: 1;
+		box-shadow: 0 0 20px var(--particle-color), 0 0 40px var(--particle-color);
+		transform: translate(-50%, -50%);
+		left: 100px;
+		top: 100px;
+	}
+
+	.particle-label {
+		position: absolute;
+		left: 20px;
+		top: -8px;
+		white-space: nowrap;
+		font-size: 11px;
+		font-weight: 600;
+		background: rgba(0, 0, 0, 0.85);
+		padding: 3px 8px;
+		border-radius: 4px;
+		border: 1px solid currentColor;
+		box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+	}
+
+	.mobile-hint {
+		display: none;
+		font-size: 0.75rem;
+		color: #666;
+		margin-top: 0.5rem;
+		text-align: center;
+	}
+
+	@media (max-width: 768px) {
+		.particle-label {
+			font-size: 9px;
+			padding: 2px 6px;
+			left: 15px;
+		}
+
+		.flow-particle {
+			width: 10px;
+			height: 10px;
+		}
+
+		.mobile-hint {
+			display: block;
+		}
 	}
 </style>
