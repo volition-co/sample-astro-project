@@ -1,8 +1,229 @@
 ---
-import SuperconductorDiagram from '../components/SuperconductorDiagram.astro';
+import TraditionalOrgDiagram from '../components/TraditionalOrgDiagram.astro';
+import SuperconductorVisionDiagram from '../components/SuperconductorVisionDiagram.astro';
 import Layout from '../layouts/Layout.astro';
 ---
 
 <Layout>
-	<SuperconductorDiagram />
+	<div class="hero-section">
+		<h1 class="hero-title">Superconductor</h1>
+		<p class="hero-subtitle">Your Autonomous Product Organization</p>
+		<p class="hero-description">
+			Why aren't your agents working right now? They should be. Always.
+		</p>
+	</div>
+
+	<div class="diagram-section">
+		<div class="diagram-header">
+			<h2>Before: Traditional Product Development</h2>
+			<p class="diagram-description">
+				Human teams augmented by limited AI assistance. Work stops when humans sleep.
+				Bottlenecks accumulate in backlogs, sprint planning, and code reviews.
+			</p>
+		</div>
+		<TraditionalOrgDiagram />
+
+		<div class="diagram-header after-section">
+			<h2>After: The Superconductor Vision</h2>
+			<p class="diagram-description">
+				<strong>24/7 autonomous development</strong> with multiple AI agents working in parallel.
+				Ambient listening to all signals. Humans provide strategic oversight while AI agents handle implementation.
+			</p>
+		</div>
+		<SuperconductorVisionDiagram />
+
+		<div class="value-props">
+			<div class="value-prop">
+				<h3>🎧 Always Listening</h3>
+				<p>Continuously monitors customer support, error logs, session replays, and market intelligence</p>
+			</div>
+			<div class="value-prop">
+				<h3>⚡ Never Blocked</h3>
+				<p>Specialized unblocker agents identify and resolve bottlenecks automatically</p>
+			</div>
+			<div class="value-prop">
+				<h3>🚀 Massive Parallelization</h3>
+				<p>Multiple AI agents work simultaneously on different features and fixes</p>
+			</div>
+			<div class="value-prop">
+				<h3>👁️ Full Visibility</h3>
+				<p>Complete transparency with human oversight at critical decision points</p>
+			</div>
+		</div>
+
+		<div class="cta-section">
+			<p class="cta-text">
+				Your AI product team is here. It's time to put it to work.
+			</p>
+			<a href="#" class="cta-button">Get Started</a>
+		</div>
+	</div>
 </Layout>
+
+<style>
+	.hero-section {
+		text-align: center;
+		padding: 4rem 2rem 2rem;
+		background: linear-gradient(180deg, #1a1a1a 0%, #252525 100%);
+	}
+
+	.hero-title {
+		font-size: 4rem;
+		margin: 0 0 1rem 0;
+		font-weight: 300;
+		letter-spacing: -0.02em;
+		background: linear-gradient(135deg, #4a9eff 0%, #80c0ff 100%);
+		-webkit-background-clip: text;
+		-webkit-text-fill-color: transparent;
+		background-clip: text;
+	}
+
+	.hero-subtitle {
+		font-size: 1.5rem;
+		color: #aaa;
+		margin: 0 0 1rem 0;
+		font-weight: 300;
+	}
+
+	.hero-description {
+		font-size: 1.1rem;
+		color: #ccc;
+		margin: 0 auto;
+		max-width: 600px;
+		line-height: 1.6;
+	}
+
+	.diagram-section {
+		padding: 2rem;
+		max-width: 1400px;
+		margin: 0 auto;
+	}
+
+	.diagram-header {
+		text-align: center;
+		margin: 3rem 0 1rem;
+	}
+
+	.diagram-header.after-section {
+		margin-top: 5rem;
+		position: relative;
+	}
+
+	.diagram-header.after-section::before {
+		content: '';
+		position: absolute;
+		top: -2rem;
+		left: 50%;
+		transform: translateX(-50%);
+		width: 100px;
+		height: 2px;
+		background: linear-gradient(90deg, transparent, #4a9eff, transparent);
+	}
+
+	.diagram-header h2 {
+		font-size: 2rem;
+		margin: 0 0 0.5rem 0;
+		font-weight: 400;
+		color: #fff;
+	}
+
+	.diagram-description {
+		font-size: 1rem;
+		color: #aaa;
+		margin: 0 auto 1.5rem;
+		max-width: 700px;
+		line-height: 1.5;
+	}
+
+	.diagram-description strong {
+		color: #4a9eff;
+		font-weight: 600;
+	}
+
+	.value-props {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+		gap: 2rem;
+		margin: 4rem 0;
+		padding: 3rem 2rem;
+		background: #252525;
+		border-radius: 12px;
+		border: 1px solid #333;
+	}
+
+	.value-prop h3 {
+		font-size: 1.3rem;
+		margin: 0 0 0.5rem 0;
+		color: #fff;
+		font-weight: 500;
+	}
+
+	.value-prop p {
+		font-size: 0.95rem;
+		color: #aaa;
+		line-height: 1.5;
+		margin: 0;
+	}
+
+	.cta-section {
+		text-align: center;
+		padding: 4rem 2rem;
+		margin-top: 3rem;
+		background: linear-gradient(135deg, #252535 0%, #1a1a2e 100%);
+		border-radius: 12px;
+		border: 1px solid #333;
+	}
+
+	.cta-text {
+		font-size: 1.3rem;
+		color: #ccc;
+		margin: 0 0 2rem 0;
+		font-weight: 300;
+	}
+
+	.cta-button {
+		display: inline-block;
+		padding: 1rem 3rem;
+		font-size: 1.1rem;
+		color: #fff;
+		background: linear-gradient(135deg, #4a9eff 0%, #3a8fd5 100%);
+		text-decoration: none;
+		border-radius: 8px;
+		font-weight: 500;
+		transition: all 0.3s ease;
+		box-shadow: 0 4px 15px rgba(74, 158, 255, 0.3);
+	}
+
+	.cta-button:hover {
+		transform: translateY(-2px);
+		box-shadow: 0 6px 20px rgba(74, 158, 255, 0.4);
+	}
+
+	@media (max-width: 768px) {
+		.hero-title {
+			font-size: 2.5rem;
+		}
+
+		.hero-subtitle {
+			font-size: 1.2rem;
+		}
+
+		.hero-description {
+			font-size: 1rem;
+		}
+
+		.diagram-header h2 {
+			font-size: 1.5rem;
+		}
+
+		.value-props {
+			grid-template-columns: 1fr;
+			padding: 2rem 1.5rem;
+		}
+
+		.cta-button {
+			padding: 0.8rem 2rem;
+			font-size: 1rem;
+		}
+	}
+</style>

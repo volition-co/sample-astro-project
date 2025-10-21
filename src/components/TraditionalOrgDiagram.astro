@@ -1,0 +1,262 @@
+---
+// Traditional product organization workflow - the "before" state
+---
+
+<div class="traditional-org-container">
+	<div id="cy-traditional"></div>
+</div>
+
+<script>
+	import cytoscape from 'cytoscape';
+
+	// Define the traditional workflow graph structure
+	const elements = [
+		// Input nodes (left side)
+		{ data: { id: 'customer-requests', label: '📧 Customer requests', type: 'input' } },
+		{ data: { id: 'product-ideas', label: '💡 Product ideas', type: 'input' } },
+		{ data: { id: 'bugs', label: '🐛 Bug reports', type: 'input' } },
+		{ data: { id: 'analytics', label: '📊 Analytics', type: 'input' } },
+
+		// Human team members
+		{ data: { id: 'pm', label: '👤 Product Manager', type: 'role', role: 'human' } },
+		{ data: { id: 'designer', label: '👤 Designer', type: 'role', role: 'human' } },
+		{ data: { id: 'dev-1', label: '👤 Developer', type: 'role', role: 'human' } },
+		{ data: { id: 'dev-2', label: '👤 Developer', type: 'role', role: 'human' } },
+		{ data: { id: 'qa', label: '👤 QA Engineer', type: 'role', role: 'human' } },
+
+		// Limited AI assistance (small, supplementary)
+		{ data: { id: 'ai-copilot', label: '🤖 AI Copilot', type: 'role', role: 'ai-assistant' } },
+
+		// Process nodes
+		{ data: { id: 'backlog', label: '📋 Backlog', type: 'process' } },
+		{ data: { id: 'sprint', label: '🔄 Sprint Planning', type: 'process' } },
+		{ data: { id: 'review', label: '✅ Code Review', type: 'process' } },
+
+		// Output
+		{ data: { id: 'app', label: '💻 Product', type: 'output' } },
+
+		// Edges
+		{ data: { source: 'customer-requests', target: 'pm' } },
+		{ data: { source: 'product-ideas', target: 'pm' } },
+		{ data: { source: 'bugs', target: 'pm' } },
+		{ data: { source: 'analytics', target: 'pm' } },
+
+		{ data: { source: 'pm', target: 'backlog' } },
+		{ data: { source: 'backlog', target: 'sprint' } },
+		{ data: { source: 'sprint', target: 'designer' } },
+		{ data: { source: 'sprint', target: 'dev-1' } },
+
+		{ data: { source: 'designer', target: 'dev-1' } },
+		{ data: { source: 'dev-1', target: 'dev-2' } },
+		{ data: { source: 'dev-1', target: 'ai-copilot', style: 'dashed' } }, // Dashed line for optional AI help
+		{ data: { source: 'ai-copilot', target: 'dev-1', style: 'dashed' } },
+
+		{ data: { source: 'dev-2', target: 'review' } },
+		{ data: { source: 'dev-1', target: 'review' } },
+		{ data: { source: 'review', target: 'qa' } },
+		{ data: { source: 'qa', target: 'app' } },
+	];
+
+	// Check if mobile
+	const isMobile = window.innerWidth < 768;
+
+	// Initialize Cytoscape
+	const cy = cytoscape({
+		container: document.getElementById('cy-traditional'),
+		elements: elements,
+		userZoomingEnabled: !isMobile,
+		userPanningEnabled: !isMobile,
+		boxSelectionEnabled: false,
+		wheelSensitivity: 0.2,
+		style: [
+			{
+				selector: 'node',
+				style: {
+					'background-color': '#3a3a3a',
+					'label': 'data(label)',
+					'text-valign': 'center',
+					'text-halign': 'center',
+					'color': '#ffffff',
+					'font-size': isMobile ? '9px' : '11px',
+					'border-width': 2,
+					'border-color': '#555',
+					'text-wrap': 'wrap',
+					'text-max-width': isMobile ? '70px' : '100px',
+					'width': isMobile ? '65px' : '90px',
+					'height': isMobile ? '40px' : '55px',
+					'shape': 'roundrectangle'
+				}
+			},
+			{
+				selector: 'node[type="input"]',
+				style: {
+					'background-color': '#2a2a2a',
+					'border-color': '#666',
+					'width': isMobile ? '75px' : '110px',
+					'height': isMobile ? '35px' : '45px'
+				}
+			},
+			{
+				selector: 'node[role="human"]',
+				style: {
+					'background-color': '#5a4d8b', // Purple for humans
+					'border-color': '#7a6dad',
+					'font-weight': 'bold'
+				}
+			},
+			{
+				selector: 'node[role="ai-assistant"]',
+				style: {
+					'background-color': '#2a4a6a', // Subdued blue for limited AI
+					'border-color': '#3a5a7a',
+					'width': isMobile ? '50px' : '70px', // Smaller to show limited role
+					'height': isMobile ? '30px' : '40px',
+					'font-size': isMobile ? '8px' : '10px',
+					'opacity': 0.7
+				}
+			},
+			{
+				selector: 'node[type="process"]',
+				style: {
+					'background-color': '#4a4a4a',
+					'border-color': '#6a6a6a',
+					'shape': 'rectangle'
+				}
+			},
+			{
+				selector: 'node[type="output"]',
+				style: {
+					'background-color': '#2a5a2a',
+					'border-color': '#4a7a4a',
+					'width': isMobile ? '55px' : '70px',
+					'height': isMobile ? '40px' : '55px',
+					'font-weight': 'bold'
+				}
+			},
+			{
+				selector: 'edge',
+				style: {
+					'width': 2,
+					'line-color': '#666',
+					'target-arrow-color': '#666',
+					'target-arrow-shape': 'triangle',
+					'curve-style': 'bezier'
+				}
+			},
+			{
+				selector: 'edge[style="dashed"]',
+				style: {
+					'line-style': 'dashed',
+					'line-color': '#444',
+					'target-arrow-color': '#444',
+					'opacity': 0.6
+				}
+			}
+		],
+		layout: {
+			name: 'preset',
+			positions: function(node) {
+				const id = node.id();
+				const positions = {
+					// Inputs column
+					'customer-requests': { x: 100, y: 100 },
+					'product-ideas': { x: 100, y: 180 },
+					'bugs': { x: 100, y: 260 },
+					'analytics': { x: 100, y: 340 },
+
+					// PM and planning column
+					'pm': { x: 280, y: 220 },
+					'backlog': { x: 430, y: 220 },
+					'sprint': { x: 580, y: 220 },
+
+					// Design and dev column
+					'designer': { x: 730, y: 150 },
+					'dev-1': { x: 730, y: 250 },
+					'dev-2': { x: 730, y: 350 },
+					'ai-copilot': { x: 860, y: 250 }, // Off to the side
+
+					// Review and QA column
+					'review': { x: 950, y: 250 },
+					'qa': { x: 1100, y: 250 },
+
+					// Output
+					'app': { x: 1250, y: 250 }
+				};
+				return positions[id] || { x: 0, y: 0 };
+			}
+		}
+	});
+
+	// Fit the graph
+	cy.fit(30);
+	if (!isMobile) {
+		cy.maxZoom(2);
+		cy.minZoom(0.5);
+	}
+
+	// Bottleneck indicators - show where work gets stuck
+	let bottleneckTimer;
+
+	function showBottlenecks() {
+		// Highlight bottlenecks with pulsing red
+		const bottleneckNodes = ['backlog', 'sprint', 'review'];
+
+		bottleneckNodes.forEach(nodeId => {
+			const node = cy.$('#' + nodeId);
+			node.animate({
+				style: {
+					'background-color': '#8b3a3a',
+					'border-color': '#ff6b6b',
+					'border-width': 3
+				},
+				duration: 1000,
+				easing: 'ease-in-out'
+			}).delay(1000).animate({
+				style: {
+					'background-color': '#4a4a4a',
+					'border-color': '#6a6a6a',
+					'border-width': 2
+				},
+				duration: 1000,
+				easing: 'ease-in-out'
+			});
+		});
+	}
+
+	// Show bottlenecks periodically
+	bottleneckTimer = setInterval(showBottlenecks, 8000);
+	setTimeout(showBottlenecks, 2000); // Initial delay
+
+	// Cleanup on page navigation
+	window.addEventListener('beforeunload', () => {
+		if (bottleneckTimer) clearInterval(bottleneckTimer);
+	});
+</script>
+
+<style>
+	.traditional-org-container {
+		width: 100%;
+		height: 500px;
+		position: relative;
+		margin: 2rem 0;
+	}
+
+	#cy-traditional {
+		width: 100%;
+		height: 100%;
+		background: #252525;
+		border-radius: 12px;
+		border: 1px solid #333;
+		position: relative;
+	}
+
+	@media (max-width: 768px) {
+		.traditional-org-container {
+			height: 400px;
+		}
+
+		#cy-traditional {
+			border-radius: 8px;
+		}
+	}
+</style>
