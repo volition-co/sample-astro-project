@@ -1,0 +1,400 @@
+---
+// Superconductor vision - the "after" state with autonomous product organization
+---
+
+<div class="superconductor-vision-container">
+	<div id="cy-superconductor"></div>
+</div>
+
+<script>
+	import cytoscape from 'cytoscape';
+
+	// Define the Superconductor vision graph structure
+	const elements = [
+		// Ambient listening sources (left side) - more comprehensive
+		{ data: { id: 'customer-support', label: '📧 Customer Support', type: 'input' } },
+		{ data: { id: 'error-monitoring', label: '🐛 Sentry/Errors', type: 'input' } },
+		{ data: { id: 'session-replays', label: '🎥 Session Replays', type: 'input' } },
+		{ data: { id: 'competitor-intel', label: '🌐 Market Intel', type: 'input' } },
+		{ data: { id: 'internal-comms', label: '💬 Slack/Meetings', type: 'input' } },
+		{ data: { id: 'product-ideas', label: '💡 Product Ideas', type: 'input' } },
+
+		// Single AI agents of each type
+		{ data: { id: 'ai-pm', label: '🤖 AI PM', type: 'role', role: 'ai-primary' } },
+		{ data: { id: 'human-pm', label: '👤 Human PM', type: 'role', role: 'human-lead' } },
+
+		// Single AI Designer
+		{ data: { id: 'ai-designer', label: '🤖 AI Designer', type: 'role', role: 'ai-primary' } },
+		{ data: { id: 'human-designer', label: '👤 Designer', type: 'role', role: 'human-lead' } },
+
+		// Single AI Dev
+		{ data: { id: 'ai-dev', label: '🤖 AI Dev', type: 'role', role: 'ai-primary' } },
+		{ data: { id: 'human-dev', label: '👤 Lead Dev', type: 'role', role: 'human-lead' } },
+
+		// Specialized AI agents
+		{ data: { id: 'ai-qa', label: '🤖 AI QA', type: 'role', role: 'ai-specialist' } },
+		{ data: { id: 'ai-security', label: '🤖 AI Security', type: 'role', role: 'ai-specialist' } },
+		{ data: { id: 'ai-perf', label: '🤖 AI Perf', type: 'role', role: 'ai-specialist' } },
+		{ data: { id: 'ai-a11y', label: '🤖 AI A11y', type: 'role', role: 'ai-specialist' } },
+
+		// Unblocking agent (special)
+		{ data: { id: 'ai-unblocker', label: '⚡ AI Unblocker', type: 'role', role: 'ai-unblocker' } },
+
+		// Deployment and monitoring
+		{ data: { id: 'ai-deploy', label: '🤖 AI Deploy', type: 'role', role: 'ai-specialist' } },
+		{ data: { id: 'feature-flags', label: '🚩 Feature Flags', type: 'process' } },
+
+		// Human oversight
+		{ data: { id: 'human-reviewer', label: '👤 Human Review', type: 'role', role: 'human-lead' } },
+
+		// Output
+		{ data: { id: 'app', label: '🚀 Product (24/7)', type: 'output' } },
+
+		// Edges - showing streamlined workflows
+		// All inputs flow to AI PM
+		{ data: { source: 'customer-support', target: 'ai-pm' } },
+		{ data: { source: 'error-monitoring', target: 'ai-pm' } },
+		{ data: { source: 'session-replays', target: 'ai-pm' } },
+		{ data: { source: 'competitor-intel', target: 'ai-pm' } },
+		{ data: { source: 'internal-comms', target: 'ai-pm' } },
+		{ data: { source: 'product-ideas', target: 'human-pm' } },
+
+		// PMs coordinate
+		{ data: { source: 'ai-pm', target: 'human-pm', style: 'coordination' } },
+
+		// PMs to Designers
+		{ data: { source: 'human-pm', target: 'ai-designer' } },
+		{ data: { source: 'ai-pm', target: 'ai-designer' } },
+		{ data: { source: 'ai-designer', target: 'human-designer', style: 'coordination' } },
+
+		// Designers to Dev
+		{ data: { source: 'human-designer', target: 'ai-dev' } },
+		{ data: { source: 'ai-designer', target: 'ai-dev' } },
+
+		// Dev coordinates with human lead
+		{ data: { source: 'ai-dev', target: 'human-dev', style: 'coordination' } },
+
+		// Dev to QA and specialists (parallel testing)
+		{ data: { source: 'ai-dev', target: 'ai-qa' } },
+		{ data: { source: 'ai-dev', target: 'ai-security' } },
+		{ data: { source: 'ai-dev', target: 'ai-perf' } },
+		{ data: { source: 'ai-dev', target: 'ai-a11y' } },
+
+		// Unblocker helps when needed
+		{ data: { source: 'ai-dev', target: 'ai-unblocker', style: 'unblock' } },
+		{ data: { source: 'ai-qa', target: 'ai-unblocker', style: 'unblock' } },
+		{ data: { source: 'ai-unblocker', target: 'human-dev', style: 'unblock' } },
+
+		// Testing to deployment
+		{ data: { source: 'ai-qa', target: 'ai-deploy' } },
+		{ data: { source: 'ai-security', target: 'ai-deploy' } },
+		{ data: { source: 'ai-perf', target: 'ai-deploy' } },
+		{ data: { source: 'ai-a11y', target: 'ai-deploy' } },
+
+		// Human review checkpoint
+		{ data: { source: 'human-dev', target: 'human-reviewer' } },
+		{ data: { source: 'ai-deploy', target: 'feature-flags' } },
+		{ data: { source: 'feature-flags', target: 'human-reviewer' } },
+
+		// Deploy to production
+		{ data: { source: 'human-reviewer', target: 'app' } },
+	];
+
+	// Check if mobile
+	const isMobile = window.innerWidth < 768;
+
+	// Initialize Cytoscape
+	const cy = cytoscape({
+		container: document.getElementById('cy-superconductor'),
+		elements: elements,
+		userZoomingEnabled: !isMobile,
+		userPanningEnabled: !isMobile,
+		boxSelectionEnabled: false,
+		wheelSensitivity: 0.2,
+		style: [
+			{
+				selector: 'node',
+				style: {
+					'background-color': '#3a3a3a',
+					'label': 'data(label)',
+					'text-valign': 'center',
+					'text-halign': 'center',
+					'color': '#ffffff',
+					'font-size': isMobile ? '8px' : '10px',
+					'border-width': 2,
+					'border-color': '#555',
+					'text-wrap': 'wrap',
+					'text-max-width': isMobile ? '55px' : '75px',
+					'width': isMobile ? '50px' : '70px',
+					'height': isMobile ? '35px' : '45px',
+					'shape': 'roundrectangle'
+				}
+			},
+			{
+				selector: 'node[type="input"]',
+				style: {
+					'background-color': '#2a2a2a',
+					'border-color': '#666',
+					'width': isMobile ? '65px' : '90px',
+					'height': isMobile ? '30px' : '40px',
+					'font-size': isMobile ? '7px' : '9px'
+				}
+			},
+			{
+				selector: 'node[role="ai-primary"]',
+				style: {
+					'background-color': '#1e5a8f', // Bright blue for AI agents
+					'border-color': '#3a8fd5',
+					'font-weight': 'bold',
+					'box-shadow': '0 0 10px #3a8fd5'
+				}
+			},
+			{
+				selector: 'node[role="ai-specialist"]',
+				style: {
+					'background-color': '#2a7a5a', // Green for specialist AI
+					'border-color': '#4aba7a',
+					'font-weight': 'bold'
+				}
+			},
+			{
+				selector: 'node[role="ai-unblocker"]',
+				style: {
+					'background-color': '#ffa500', // Orange for unblocker
+					'border-color': '#ffca50',
+					'font-weight': 'bold',
+					'box-shadow': '0 0 15px #ffa500'
+				}
+			},
+			{
+				selector: 'node[role="human-lead"]',
+				style: {
+					'background-color': '#8b4d8b', // Purple for humans
+					'border-color': '#ad6dad',
+					'font-weight': 'bold',
+					'width': isMobile ? '60px' : '85px',
+					'height': isMobile ? '40px' : '50px'
+				}
+			},
+			{
+				selector: 'node[type="process"]',
+				style: {
+					'background-color': '#4a4a4a',
+					'border-color': '#6a6a6a',
+					'shape': 'rectangle'
+				}
+			},
+			{
+				selector: 'node[type="output"]',
+				style: {
+					'background-color': '#2a8a2a',
+					'border-color': '#4aca4a',
+					'width': isMobile ? '70px' : '100px',
+					'height': isMobile ? '45px' : '60px',
+					'font-weight': 'bold',
+					'font-size': isMobile ? '10px' : '12px',
+					'box-shadow': '0 0 20px #4aca4a'
+				}
+			},
+			{
+				selector: 'edge',
+				style: {
+					'width': 2,
+					'line-color': '#666',
+					'target-arrow-color': '#666',
+					'target-arrow-shape': 'triangle',
+					'curve-style': 'bezier'
+				}
+			},
+			{
+				selector: 'edge[style="coordination"]',
+				style: {
+					'line-style': 'dotted',
+					'line-color': '#888',
+					'target-arrow-color': '#888',
+					'width': 1.5
+				}
+			},
+			{
+				selector: 'edge[style="unblock"]',
+				style: {
+					'line-color': '#ffa500',
+					'target-arrow-color': '#ffa500',
+					'width': 2.5,
+					'line-style': 'dashed'
+				}
+			}
+		],
+		layout: {
+			name: 'preset',
+			positions: function(node) {
+				const id = node.id();
+				const positions = {
+					// Inputs column (far left)
+					'customer-support': { x: 50, y: 100 },
+					'error-monitoring': { x: 50, y: 160 },
+					'session-replays': { x: 50, y: 220 },
+					'competitor-intel': { x: 50, y: 280 },
+					'internal-comms': { x: 50, y: 340 },
+					'product-ideas': { x: 50, y: 400 },
+
+					// PMs column
+					'ai-pm': { x: 200, y: 220 },
+					'human-pm': { x: 200, y: 320 },
+
+					// Designers column
+					'ai-designer': { x: 350, y: 220 },
+					'human-designer': { x: 350, y: 320 },
+
+					// Devs column
+					'ai-dev': { x: 500, y: 220 },
+					'human-dev': { x: 500, y: 320 },
+
+					// QA and specialists (arranged in a fan)
+					'ai-qa': { x: 650, y: 150 },
+					'ai-security': { x: 650, y: 210 },
+					'ai-perf': { x: 650, y: 270 },
+					'ai-a11y': { x: 650, y: 330 },
+
+					// Unblocker (above, helping everyone)
+					'ai-unblocker': { x: 425, y: 100 },
+
+					// Deployment column
+					'ai-deploy': { x: 800, y: 250 },
+					'feature-flags': { x: 920, y: 250 },
+					'human-reviewer': { x: 1040, y: 250 },
+
+					// Output
+					'app': { x: 1180, y: 250 }
+				};
+				return positions[id] || { x: 0, y: 0 };
+			}
+		}
+	});
+
+	// Fit the graph
+	cy.fit(30);
+	if (!isMobile) {
+		cy.maxZoom(2);
+		cy.minZoom(0.5);
+	}
+
+	// Continuous flow animation - showing 24/7 operation
+	const flowPaths = [
+		{ nodes: ['customer-support', 'ai-pm', 'ai-designer', 'ai-dev', 'ai-qa', 'ai-deploy', 'feature-flags', 'human-reviewer', 'app'], color: '#4aca4a', label: 'Bug Fix' },
+		{ nodes: ['error-monitoring', 'ai-pm', 'ai-dev', 'ai-security', 'ai-deploy', 'feature-flags', 'human-reviewer', 'app'], color: '#4a9eff', label: 'Security Fix' },
+		{ nodes: ['session-replays', 'ai-pm', 'ai-designer', 'ai-dev', 'ai-perf', 'ai-deploy', 'feature-flags', 'human-reviewer', 'app'], color: '#ff9f4a', label: 'UX Improvement' },
+		{ nodes: ['competitor-intel', 'ai-pm', 'ai-dev', 'ai-qa', 'ai-deploy', 'feature-flags', 'human-reviewer', 'app'], color: '#ff6b9d', label: 'Competitive Feature' },
+		{ nodes: ['product-ideas', 'human-pm', 'human-designer', 'ai-dev', 'ai-a11y', 'ai-deploy', 'feature-flags', 'human-reviewer', 'app'], color: '#c44dff', label: 'New Feature' }
+	];
+
+	let flowIndex = 0;
+	let flowInterval;
+
+	function animateFlow() {
+		const flow = flowPaths[flowIndex];
+		const nodes = flow.nodes;
+
+		// Highlight the path
+		for (let i = 0; i < nodes.length - 1; i++) {
+			setTimeout(() => {
+				const node = cy.$('#' + nodes[i]);
+				const nextNode = cy.$('#' + nodes[i + 1]);
+
+				// Pulse current node
+				node.animate({
+					style: {
+						'background-color': flow.color,
+						'border-width': 3,
+						'border-color': flow.color
+					},
+					duration: 300,
+					easing: 'ease-out'
+				}).delay(500).animate({
+					style: {
+						'border-width': 2
+					},
+					duration: 300
+				});
+
+				// Animate edge if exists
+				const edge = cy.edges(`[source="${nodes[i]}"][target="${nodes[i + 1]}"]`);
+				if (edge.length > 0) {
+					edge.animate({
+						style: {
+							'line-color': flow.color,
+							'target-arrow-color': flow.color,
+							'width': 4
+						},
+						duration: 300
+					}).delay(500).animate({
+						style: {
+							'line-color': '#666',
+							'target-arrow-color': '#666',
+							'width': 2
+						},
+						duration: 300
+					});
+				}
+			}, i * 400);
+		}
+
+		// Special effect on app node
+		setTimeout(() => {
+			const appNode = cy.$('#app');
+			appNode.animate({
+				style: {
+					'background-color': flow.color,
+					'box-shadow': `0 0 30px ${flow.color}`
+				},
+				duration: 500
+			}).delay(500).animate({
+				style: {
+					'background-color': '#2a8a2a',
+					'box-shadow': '0 0 20px #4aca4a'
+				},
+				duration: 500
+			});
+		}, (nodes.length - 1) * 400);
+
+		flowIndex = (flowIndex + 1) % flowPaths.length;
+	}
+
+	// Start continuous animation
+	flowInterval = setInterval(animateFlow, 5000);
+	setTimeout(animateFlow, 1500); // Initial delay
+
+	// Cleanup
+	window.addEventListener('beforeunload', () => {
+		if (flowInterval) clearInterval(flowInterval);
+	});
+</script>
+
+<style>
+	.superconductor-vision-container {
+		width: 100%;
+		height: 550px;
+		position: relative;
+		margin: 2rem 0;
+	}
+
+	#cy-superconductor {
+		width: 100%;
+		height: 100%;
+		background: linear-gradient(135deg, #1a1a2e 0%, #252535 100%);
+		border-radius: 12px;
+		border: 1px solid #333;
+		position: relative;
+		box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+	}
+
+	@media (max-width: 768px) {
+		.superconductor-vision-container {
+			height: 450px;
+		}
+
+		#cy-superconductor {
+			border-radius: 8px;
+		}
+	}
+</style>
